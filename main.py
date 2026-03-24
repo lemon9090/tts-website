@@ -1,3 +1,5 @@
+from fastapi.staticfiles import StaticFiles
+app.mount("/static", StaticFiles(directory="static"), name="static")
 from fastapi import FastAPI, File, UploadFile, Form
 from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
@@ -6,6 +8,7 @@ import edge_tts
 import asyncio
 import uuid
 import os
+
 
 app = FastAPI()
 
