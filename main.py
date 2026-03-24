@@ -1,10 +1,4 @@
-from fastapi import Request
-@app.get("/", response_class=HTMLResponse)
-async def home(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
-from fastapi.staticfiles import StaticFiles
-app.mount("/static", StaticFiles(directory="static"), name="static")
-from fastapi import FastAPI, File, UploadFile, Form
+from fastapi import FastAPI, File, UploadFile, Form, Request
 from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -13,20 +7,29 @@ import asyncio
 import uuid
 import os
 
-
 app = FastAPI()
 
+# Static + Templates
+app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
+# Output folder
 OUTPUT_DIR = "outputs"
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
+# Home route
 @app.get("/", response_class=HTMLResponse)
-async def home(request):
+async def home(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
+# Generate route
 @app.post("/generate")
-async def generate(text: str = Form(None), file: UploadFile = File(None), voice: str = Form(...)):
+async def generate(
+    request: Request,
+    text: str = Form(None),
+    file: UploadFile = File(None),
+    voice: str = Form(...)
+):
     if file:
         content = await file.read()
         text = content.decode("utf-8")
