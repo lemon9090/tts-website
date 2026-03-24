@@ -1,3 +1,7 @@
+from fastapi import Request
+@app.get("/", response_class=HTMLResponse)
+async def home(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
 from fastapi.staticfiles import StaticFiles
 app.mount("/static", StaticFiles(directory="static"), name="static")
 from fastapi import FastAPI, File, UploadFile, Form
