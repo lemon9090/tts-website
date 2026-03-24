@@ -8,11 +8,14 @@ import os
 
 app = FastAPI()
 
-# Mount static files
+# Static files
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
-# Templates
-templates.env.cache = {}   # 🔥 ADD THIS LINE
+# ✅ CREATE templates FIRST
+templates = Jinja2Templates(directory="templates")
+
+# ✅ THEN modify cache
+templates.env.cache = {}
 
 # Output folder
 OUTPUT_DIR = "outputs"
@@ -23,7 +26,7 @@ os.makedirs(OUTPUT_DIR, exist_ok=True)
 async def home(request: Request):
     return templates.TemplateResponse(
         "index.html",
-        {"request": request}   # ✅ correct dict
+        {"request": request}
     )
 
 # Generate audio
