@@ -1,3 +1,5 @@
+import nest_asyncio
+nest_asyncio.apply()
 from fastapi import FastAPI, File, UploadFile, Form, Request
 from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
@@ -30,14 +32,21 @@ async def generate(
     file: UploadFile = File(None),
     voice: str = Form(...)
 ):
-    if file:
-        content = await file.read()
-        text = content.decode("utf-8")
+    try:
+        if file:
+            content = await file.read()
+            text = content.decode("utf-8")
 
-    filename = f"{uuid.uuid4()}.mp3"
-    filepath = os.path.join(OUTPUT_DIR, filename)
+        if not text:
+            return {"error": "No text provided"}
 
-    tts = edge_tts.Communicate(text, voice)
-    await tts.save(filepath)
+        filename = f"{uuid.uuid4()}.mp3"
+        filepath = os.path.join(OUTPUT_DIR, filename)
 
-    return FileResponse(filepath, media_type="audio/mpeg", filename="output.mp3")
+        tts = edge_tts.Communicate(text, voice)
+        await tts.save(filepath)
+
+        return FileResponse(filepath, media_type="audio/mpeg", filename="output.mp3")
+
+    except Exception as e:
+        return {"error": str(e)}
