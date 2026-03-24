@@ -1,34 +1,19 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <title>AI Text to Speech</title>
-    <link rel="stylesheet" href="/static/style.css">
-</head>
 <body>
 
-<div class="container">
-    <h1>🎙 AI Text to Speech</h1>
+<h1>AI TTS</h1>
 
-    <form action="/generate" method="post" enctype="multipart/form-data">
-        
-        <textarea name="text" placeholder="Enter your text..."></textarea>
+<form action="/generate" method="post" enctype="multipart/form-data">
+    <textarea name="text"></textarea><br>
+    <input type="file" name="file"><br>
 
-        <p>OR upload text file:</p>
-        <input type="file" name="file">
+    <select name="voice">
+        <option value="en-US-JennyNeural">Jenny</option>
+    </select>
 
-        <br><br>
-
-        <select name="voice">
-            <option value="en-US-JennyNeural">Jenny (Female)</option>
-            <option value="en-CA-LiamNeural">Liam (Male)</option>
-            <option value="en-US-ChristopherNeural">Christopher</option>
-        </select>
-
-        <br><br>
-
-        <button type="submit">Generate Audio</button>
-    </form>
-</div>
+    <button type="submit">Generate</button>
+</form>
 
 </body>
 </html>
