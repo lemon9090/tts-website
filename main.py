@@ -12,7 +12,7 @@ app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # Templates
-templates = Jinja2Templates(directory="templates")
+templates.env.cache = {}   # 🔥 ADD THIS LINE
 
 # Output folder
 OUTPUT_DIR = "outputs"
