@@ -2,15 +2,16 @@
 <html>
 <body>
 
-<h1>AI TTS</h1>
+<h2>TTS Tool</h2>
 
 <form action="/generate" method="post" enctype="multipart/form-data">
-    <textarea name="text"></textarea><br>
-    <input type="file" name="file"><br>
+    <textarea name="text"></textarea><br><br>
+
+    <input type="file" name="file"><br><br>
 
     <select name="voice">
         <option value="en-US-JennyNeural">Jenny</option>
-    </select>
+    </select><br><br>
 
     <button type="submit">Generate</button>
 </form>
