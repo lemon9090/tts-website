@@ -23,11 +23,9 @@ os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 # Home route
 @app.get("/", response_class=HTMLResponse)
-async def home(request: Request):
-    return templates.TemplateResponse(
-        "index.html",
-        {"request": request}
-    )
+async def home():
+    with open("templates/index.html") as f:
+        return HTMLResponse(content=f.read())
 
 # Generate audio
 @app.post("/generate")
