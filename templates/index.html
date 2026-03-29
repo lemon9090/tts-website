@@ -1,34 +1,68 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>TTS Tool</title>
+    <title>AI TTS Tool</title>
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
 
 <div class="container">
-    <h2>TTS Tool</h2>
+    <h1>🎧 AI Text to Speech</h1>
+    <p class="subtitle">Convert text or files into realistic voice</p>
 
-    <form action="/generate" method="post" enctype="multipart/form-data">
-        <textarea name="text" placeholder="Enter text..."></textarea><br><br>
+    <form id="ttsForm" action="/generate" method="post" enctype="multipart/form-data">
+        
+        <textarea name="text" placeholder="Type or paste your text here..."></textarea>
 
-        <input type="file" name="file"><br><br>
+        <div class="row">
+            <input type="file" name="file">
 
-       <select name="voice">
-    <option value="en-US-JennyNeural">Jenny (US)</option>
-    <option value="en-US-ChristopherNeural">Christopher (US)</option>
-    <option value="en-CA-LiamNeural">Liam (Canada)</option>
-    <option value="en-CA-ClaraNeural">Clara (Canada)</option>
-    <option value="en-AU-NatashaNeural">Natasha (Australia)</option>
-</select>
+            <select name="voice">
+                <option value="en-US-JennyNeural">Jenny (US)</option>
+                <option value="en-US-ChristopherNeural">Christopher (US)</option>
+                <option value="en-CA-LiamNeural">Liam (Canada)</option>
+                <option value="en-CA-ClaraNeural">Clara (Canada)</option>
+                <option value="en-AU-NatashaNeural">Natasha (Australia)</option>
+            </select>
+        </div>
 
-        <button type="submit">Generate</button>
+        <button type="submit">Generate Audio</button>
     </form>
-    <audio controls>
-    <source src="/generate" type="audio/mpeg">
-</audio>
-    
+
+    <!-- Loader -->
+    <div id="loader" class="hidden">⏳ Generating audio...</div>
+
+    <!-- Audio Player -->
+    <audio id="audioPlayer" controls class="hidden"></audio>
 </div>
+
+<script>
+const form = document.getElementById("ttsForm");
+const loader = document.getElementById("loader");
+const player = document.getElementById("audioPlayer");
+
+form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    loader.classList.remove("hidden");
+    player.classList.add("hidden");
+
+    const formData = new FormData(form);
+
+    const response = await fetch("/generate", {
+        method: "POST",
+        body: formData
+    });
+
+    const blob = await response.blob();
+    const url = URL.createObjectURL(blob);
+
+    player.src = url;
+    player.classList.remove("hidden");
+
+    loader.classList.add("hidden");
+});
+</script>
 
 </body>
 </html>
