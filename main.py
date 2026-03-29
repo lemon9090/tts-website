@@ -30,16 +30,23 @@ async def home():
 # Generate audio
 @app.post("/generate")
 async def generate(
+    request: Request,
     text: str = Form(None),
     file: UploadFile = File(None),
     voice: str = Form(...)
 ):
-    if file:
+    # DEBUG PRINT (important)
+    print("TEXT:", text)
+    print("FILE:", file)
+
+    # Handle file first
+    if file and file.filename:
         content = await file.read()
         text = content.decode("utf-8")
 
-    if not text:
-        return {"error": "No text provided"}
+    # Clean text
+    if not text or text.strip() == "":
+        return {"error": "Please enter text or upload a file"}
 
     filename = f"{uuid.uuid4()}.mp3"
     filepath = os.path.join(OUTPUT_DIR, filename)
